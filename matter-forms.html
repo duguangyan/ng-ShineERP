@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--matter-forms</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>物料管理</span> <em>>></em> <span>物料报表</span>
+					</div>
+					<div class="user-acceptance user-acceptance-seach" style="margin-top: 10px">
+						<select name="" style="margin:0;">
+							<option value="">待审核</option>
+							<option value="">内容一</option>
+							<option value="">内容一</option>
+							<option value="">内容一</option>
+							<option value="">内容一</option>
+						</select>
+						<div class="user-acceptance-seach" style="display: inline-block; margin-left: 10px; margin-top: 0;">
+							<span>开始时间：</span><input type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" placeholder="请输入开始时间" />
+							<span>结束时间：</span><input type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" placeholder="请输入结束时间" />
+							<div class="user-acceptance-seachBtn">
+								<input type="search" placeholder="请输入查询内容" />
+							</div>
+							<a class="finance-statements-out" href="javascript:void(0);">导　出</a>
+						</div>
+						<div class="user-acceptance-table">
+							<table>
+								<thead>
+									<tr>
+										<th>物料编码</th>
+										<th>物料名称</th>
+										<th>规格型号</th>
+										<th>物料属性</th>
+										<th>版本号</th>
+										<th>计量单位组</th>
+										<th>使用项目</th>
+										<th>使用数量</th>
+										<th>剩余库存</th>
+										<th>日期</th>
+										<th>制单人</th>
+									</tr>
+								</thead>
+								<p>出:</p><br>
+								<tbody>
+									
+									<!--此处填写数据-->
+								</tbody>
+							</table>
+						</div>
+						<div class="user-acceptance-table-s">
+							<table>
+								<thead>
+									<tr>
+										<th>代码</th>
+										<th>名称</th>
+										<th>全名</th>
+										<th>物料属性</th>
+										<th>版本号</th>
+										<th>计量单位组</th>
+										<th>入库时间</th>
+										<th>入库人</th>
+										<th>入库数量</th>
+										<th>总计库存</th>
+										
+									</tr>
+								</thead>
+								<p>进:</p><br>
+								<tbody>
+									
+									<!--此处填写数据-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--分页
+					<div id="acceptance-page"></div>-->
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laydate/laydate.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>"+
+								"<td>"+res[i].id+"</td>"+
+								"<td>"+res[i].link+"</td>"+
+								"<td>"+res[i].date+"</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+				});
+				
+				
+				
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd1 = "";
+					for(var i = 0; i < res.length; i++) {
+						dd1 += "<tr>"+
+								"<td>"+res[i].id+"</td>"+
+								"<td>"+res[i].link+"</td>"+
+								"<td>"+res[i].date+"</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+							"</tr>";
+					}
+					$('.user-acceptance-table-s tbody').append(dd1);
+				});
+			};
+			//运行
+			demo();
+		</script>
+	</body>
+
+</html>

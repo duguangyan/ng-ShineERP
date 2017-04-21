@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--finance-statements</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>财务管理</span> <em>>></em> <span>财务报表</span>
+					</div>
+					<div class="user-acceptance">
+						<div class="user-acceptance-seach">
+							<span>报表类型：</span>
+							<select name="" style="margin-right: 20px;">
+								<option value="">总报表</option>
+								<option value="">收款报表</option>
+								<option value="">分期报表</option>
+								<option value="">定金报表</option>
+								<option value="">退款报表</option>
+							</select>
+							<a class="finance-statements-out" href="javascript:void(0);">导　出</a>
+						</div>
+
+						<div class="finance-statements-onchange">
+							<a href="finance-statements.html">总报表</a>
+							<a class="finance-statements-active"  href="finance-statements-fullPay.html">全款报表</a>
+							<a href="finance-statements-stagesPay.html">分期报表</a>
+							<a href="finance-statements-earnestPay.html">订金报表</a>
+							<a href="finance-statements-refundPay.html">退款报表</a>
+						</div>
+						<div class="finance-statements-table">
+							<div class="user-acceptance-table" style="margin-top: 0; margin:0 10px;">
+								<div class="user-acceptance-seach" style="margin-top: 0; margin-left: 10px; padding-top: 20px;">
+									<span>开始时间：</span><input type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" placeholder="请输入开始时间" />
+									<span>结束时间：</span><input type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" placeholder="请输入结束时间" />
+									<select name="" style="margin-right: 20px;">
+										<option value="">全部</option>
+										<option value="">客服</option>
+										<option value="">销售</option>
+									</select>
+									<select name="" style="margin-right: 20px;">
+										<option value="">全部</option>
+										<option value="">湖南省</option>
+										<option value="">广东省</option>
+									</select>
+									<span class="finance-statements-totalMoney">总金额：<em>1234</em>/元</span>
+								</div>
+								<table style="margin-top: 20px; border: 1px solid #E2E2E2;">
+									<thead>
+										<tr>
+											<th>订单编号</th>
+											<th>工程编号</th>
+											<th>工程类型</th>
+											<th>客户简称</th>
+											<th>付款类型</th>
+											<th>金额</th>
+											<th>付款日期</th>
+											<th>跟单人</th>
+											<th>交易类型</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!--此处填写数据-->
+									</tbody>
+								</table>
+
+							</div>
+							<!--分页-->
+							<div id="acceptance-page"></div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laydate/laydate.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>" +
+							"<td>" + res[i].id + "</td>" +
+							"<td>" + res[i].link + "</td>" +
+							"<td>" + res[i].date + "</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+		</script>
+	</body>
+
+</html>

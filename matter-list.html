@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--matter-list</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>物料管理</span> <em>>></em> <span>物料清单</span>
+					</div>
+					<div class="user-acceptance-seach">
+						<a class="finance-statements-create matter-list-create" style="margin-left: 0;" href="javascript:void(0);">新增料单</a>
+						<span class="finance-statements-totalMoney">总计金额：<em>1234</em>/元</span>
+					</div>
+					<div class="user-acceptance">
+						
+						<div class="user-acceptance-table">
+							<table>
+								<thead>
+									<tr>
+										<th></th>
+										<th>料单编号</th>
+										<th>料单名称</th>
+										<th>制单人</th>
+										<th>制单时间</th>
+										<th>金额</th>
+										<th>当前库存</th>
+										<th>安全库存</th>
+										<th>报警库存</th>
+										<th>报警时间(H)</th>
+										<th>说明</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!--此处填写数据-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--分页-->
+					<div id="acceptance-page"></div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>"+
+								"<td> <i class='checkBox'></i></td>"+
+								"<td>"+res[i].id+"</td>"+
+								"<td>"+res[i].link+"</td>"+
+								"<td>"+res[i].date+"</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>"+
+									"<a class='matter-list-exact' href='#'>查看</a>"+
+								"</td>"+
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+			
+			
+			//查看
+			$(document).on("click",".matter-list-create",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['840px', '500px']
+				  ,title: '新增料单'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="matter-basic-list-createWindow matter-list-createWindow">
+								<ul>
+									<li><label>料单名称:</label><input type="text" /></li>
+									<li><label>说明:</label><input type="text" /></li>
+									<li><label>安全库存:</label><input type="text" /></li>
+									<li><label>报警库存:</label><input type="text" /></li>
+									<li><label>报警时间间隔:</label><input style="width:36%;" type="text" /></li>
+									
+								</ul> 
+								<div class="matter-list-createTable">
+									<em>请选择物料:</em>
+									<div class="matter-list-createTable-content">
+										<input type="text" /> <span class="index-btn">确定</span><span class="index-btn">取消</span>	
+											<table>
+											<thead>
+										   	<tr>
+										   		<th>代码</th>
+												<th>名称</th>
+												<th>规格型号</th>
+												<th>库存</th>
+												<th>定额数量</th>
+											</tr>
+											</thead>
+											<tbody>
+										   	<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											</tbody>
+									   </table>
+							  	 	</div>
+								</div>
+						    </div>`
+				  ,btn: ['确定','取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			
+			$(document).on("click",".matter-list-exact",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['840px', '500px']
+				  ,title: '详情'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="matter-basic-list-createWindow matter-list-datail">
+								<ul>
+									<li><label>订单编号:</label><span>ZJ20170303</span></li>
+									<li><label>订单名称:</label><span>ZJ20170303</span></li>
+									<li><label>制作规格:</label><span>ZJ20170303</span></li>
+									<li><label>制单时间:</label><span>ZJ20170303</span></li>
+								</ul> 
+								<div class="matter-list-createTable">
+									<em>使用详情:</em>
+										<table style="width: 87%; float: left; margin: 20px 0 0 -10px;">
+											<thead>
+										   	<tr>
+										   		<th>客户简称</th>
+												<th>工程类型</th>
+												<th>联系人</th>
+												<th>联系电话</th>
+												<th>工程编号</th>
+												<th>调单日期</th>
+												<th>调单数量</th>
+												<th>总计金额</th>
+											</tr>
+											</thead>
+											<tbody>
+										   	<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											</tbody>
+									   </table>
+							  	 	
+								</div>
+								<div class="matter-list-createTable">
+									<em>使用详情:</em>
+										<table style="width: 87%; float: left; margin: 20px 0 0 -10px;">
+											<thead>
+										   	<tr>
+										   		<th>客户简称</th>
+												<th>工程类型</th>
+												<th>联系人</th>
+												<th>联系电话</th>
+												<th>工程编号</th>
+												<th>调单日期</th>
+												<th>调单数量</th>
+												<th>总计金额</th>
+											</tr>
+											</thead>
+											<tbody>
+										   	<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											<tr>
+										   		<td>001.001001</td>
+										   		<td>贴片电阻SMD</td>
+										   		<td>3.3K/0603/F/SMD</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+										   		<td>Data</td>
+											</tr>
+											</tbody>
+									   </table>
+								</div>
+						    </div>`
+				  ,btn: ['确定']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					}
+				});
+			});
+			
+			
+			
+		</script>
+	</body>
+
+</html>

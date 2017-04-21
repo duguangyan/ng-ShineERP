@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--system-staff</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>系统中心</span> <em>>></em> <span>员工管理</span>
+					</div>
+					
+					<div class="user-acceptance">
+						<div class="order-specifics-create system-role-createWarp" style="float: left;">
+							
+							<div class="user-acceptance-seach" style="margin-top: 0;">
+							<div class="user-acceptance-seachBtn" style="margin-left: 0;">
+								<input type="search" placeholder="请输入查询内容">
+							</div>
+							<a class="index-create system-staff-create" href="javascript:void(0);">新增员工</a>
+							<a class="finance-statements-out" href="javascript:void(0);">导　入</a>
+							
+						</div>
+						</div>
+						
+						<div class="user-acceptance-table">
+							<table>
+								<thead>
+									<tr>
+										<th></th>
+										<th>员工编号</th>
+										<th>员工名称</th>
+										<th>所属部门</th>
+										<th>所属角色</th>
+										<th>工作地点</th>
+										<th>联系电话</th>
+										<th>邮箱</th>
+										<th>性别</th>
+										<th>备注</th>
+										<th>是否启用</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!--此处填写数据-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--分页-->
+					<div id="acceptance-page"></div>
+					<!--工作地点-->
+					<div class="system-staff-workDress">
+						<p>工作地点管理:</p>
+						<div class="user-acceptance-seach">
+							<select name="" style="margin-left: 30px;">
+								<option value="">省</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+							</select>
+							<select name="" style="margin-left: 20px;">
+								<option value="">市</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+							</select>
+							<select name="" style="margin-left: 20px;">
+								<option value="">区</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laydate/laydate.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>"+
+								"<td> <i class='checkBox'></i></td>"+
+								"<td>"+res[i].id+"</td>"+
+								"<td>"+res[i].link+"</td>"+
+								"<td>"+res[i].date+"</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>"+
+									"<a class='system-staff-edit' href='javascript:void(0);'>修改</a>"+
+									"<a class='system-staff-del' href='javascript:void(0);'>删除</a>"+
+								"</td>"+
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+			//新增弹窗
+			$(".system-staff-create").click(function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['660px', '340px']
+				  ,title: '新增员工资料'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail system-staff-createWindow">
+								<div class="order-list-detail-left index-left">
+									<label>　　姓名:　</label><input type="text" value="" />
+									<label>联系电话:　</label><input type="text" value="" /><br>	
+									<label>　　邮箱:　</label><input type="text" value="" /><br>
+									<label>　　性别:　</label>
+									<form class="system-group-from" action="" method="get">
+										<label><input name="Fruit" type="radio" checked="checked" value="">男 </label> 
+										<label><input name="Fruit" type="radio" value="">女 </label> 
+									</form><br>
+									<label>　　备注:　</label><input type="text" value="" /><br>
+								</div>
+							    <div class="order-list-detail-right index-right">
+							   		 <label>　　部门:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									 <label>　　角色:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									 <label>工作地点:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>是否启用:　</label>
+									<form class="system-group-from" action="" method="get">
+										<label><input name="Fruit" type="radio" checked="checked" value="">是 </label> 
+										<label><input name="Fruit" type="radio" value="">否 </label> 
+									</form><br>
+									<label>　　　</label><br>
+								</div>
+								
+						    </div>`
+				  ,btn: ['确定', '取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});   
+			});
+			//修改弹窗
+			$(document).on("click",".system-staff-edit",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['660px', '340px']
+				  ,title: '修改员工资料'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail system-staff-createWindow">
+								<div class="order-list-detail-left index-left">
+									<label>　　姓名:　</label><input type="text" value="贾宝玉" />
+									<label>联系电话:　</label><input type="text" value="15888888888" /><br>	
+									<label>　　邮箱:　</label><input type="text" value="5201314@qq.com" /><br>
+									<label>　　性别:　</label>
+									<form class="system-group-from" action="" method="get">
+										<label><input name="Fruit" type="radio" checked="checked" value="">男 </label> 
+										<label><input name="Fruit" type="radio" value="">女 </label> 
+									</form><br>
+									<label>　　备注:　</label><input type="text" value="没落贵族男人" /><br>
+								</div>
+							    <div class="order-list-detail-right index-right">
+							   		 <label>　　部门:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									 <label>　　角色:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									 <label>工作地点:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>是否启用:　</label>
+									<form class="system-group-from" action="" method="get">
+										<label><input name="Fruit" type="radio" checked="checked" value="">是 </label> 
+										<label><input name="Fruit" type="radio" value="">否 </label> 
+									</form><br>
+									<label>　　　</label><br>
+								</div>
+								
+						    </div>`
+				  ,btn: ['确定', '取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});   
+			});
+			
+			
+			//删除
+			$(document).on("click",".system-staff-del",function(){
+				$(this).parent().parent().remove();
+			});
+		</script>
+	</body>
+
+</html>

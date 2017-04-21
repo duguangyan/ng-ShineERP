@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--client-deal</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<shine-right></shine-right>
+		</div>	
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laydate/laydate.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">		
+				app.controller('clientDelController', function($scope, $http) {
+					$scope.page    = 1;  //第几页
+					$scope.size    = 5;  //每页几条
+					$scope.topages = 15; //总计多少条
+					$scope.dates = [];   //数据库查询所得数据数组
+					$scope.http = function(){
+						$http.get("http://ons.me/tools/dropload/json.php?page="+$scope.page+"&size="+$scope.size)
+						  .success(function (res) {
+						  	//console.log(res);
+						  	$scope.dates = res ;
+						});
+					}
+					$scope.http();
+					$scope.pages = function(page){
+						laypage({
+							cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+							pages: $scope.topages, //通过后台拿到的总页数
+							skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+							groups: $scope.size, //连续显示分页数
+							skip: true, //是否开启跳页
+							curr: page || 1, //当前页
+							jump: function(obj, first) { //触发分页后的回调
+								if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+									$scope.page = obj.curr;
+									$scope.http();
+								}
+							}
+						});
+					};
+					$scope.pages();
+				});			
+				//右侧栏模板<shine-right></<shine-right>>
+				app.directive('shineRight', function() { 
+					 return { 
+					 restrict: 'E', 
+					 template: `<div class="index-main-right">
+								<div class="index-main-right-warp">
+									<div class="index-main-right-nav">
+										<span>客户管理</span> <em>>></em> <span>交易客户</span>
+									</div>
+									<div class="user-acceptance">
+										<div class="user-acceptance-seach">
+											<span>刷选：</span>
+											<select name="" style="margin-left: 0;">
+												<option value="">全部</option>
+												<option value="">我的客户</option>
+												<option value="">初勘</option>
+												<option value="">精勘</option>
+												<option value="">合同</option>
+												<option value="">收款</option>
+												<option value="">调度</option>
+												<option value="">安装</option>
+												<option value="">并网</option>
+												<option value="">收款</option>
+												<option value="">完成</option>
+											</select>
+												<div class="user-acceptance-seachBtn">
+													<input type="search" placeholder="请输入查询内容" />
+												</div>
+											<a href="#">发送短信</a>
+											<a href="#">发送邮件</a>
+											<a class="finance-statements-out" href="javascript:void(0);">导　出</a>
+										</div>
+										<div class="user-acceptance-table">
+											<table>
+												<thead>
+													<tr>
+														<th><i class='checkBox'style="display:none;"></i></th>
+														<th>客户简称</th>
+														<th>订单编号</th>
+														<th>工程类型</th>
+														<th>施工地址</th>
+														<th>初勘日期</th>
+														<th>业务员</th>
+														<th>联系人</th>
+														<th>联系电话</th>
+														<th>交易状态</th>
+														<th>订单类型</th>
+														<th>操作</th>
+													</tr>
+												</thead>
+												<tbody class="ng-cloak" ng-controller="clientDelController">
+													<!--此处填写数据-->
+													<tr ng-repeat="x in dates">
+														<td> <i class='checkBox'></i></td>
+														<td>{{x.id}}</td>
+														<td>{{x.link}}</td>
+														<td>{{x.date}}</td>
+														<td>111</td>
+														<td>111</td>
+														<td>111</td>
+														<td>111</td>
+														<td>111</td>
+														<td><span class='index-green'>初勘</span></td>
+														<td>111</td>
+														<td>
+															<a class='client-deal-datail' href='javascript:void(0);'>详情</a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!--分页-->
+									<div id="acceptance-page"></div>
+								</div>
+							</div>`,
+					 replace: true 
+					 }; 
+					}); 
+				
+				
+			//客户详情点击
+			$(document).on("click",".client-deal-datail",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['840px', '360px']
+				  ,title: '客户详情'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="matter-basic-list-createWindow client-centrality-createWindow">
+				  				<p>客户信息</p>
+								<ul>
+									<li><label>客户简称:</label><span>豆腐西施</span></li>	
+									<li><label>订单编号:</label><span>ZJ00000000001</span></li>
+									<li><label>工程类型:</label><span>卖豆腐</span></li>
+									<li><label>施工地址:</label><span>中国水浒传时期西施豆腐店</span></li>
+									<li><label>初勘日期:</label><span>1290=02-02</span></li>
+									<li><label>业务员:</label><span>林冲</span></li>
+									<li><label>联系人:</label><span>邻家小妹</span></li>
+									<li><label>联系电话:</label><span>15888888888</span></li>
+									<li><label>交易状态:</label><span>完成</span></li>
+									<li><label>订单类型:</label><span>四大美女</span></li>
+								</ul> 
+						    </div>`
+				  ,btn: ['确定','返回']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			//详情点击弹窗
+			$(document).on("click",".client-center-btn2",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['840px', '600px']
+				  ,title: '客户信息详情'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="matter-basic-list-createWindow client-centrality-createWindow">
+				  				<p>客户信息</p>
+								<ul>
+									<li><label>客户名称:</label><span>光华电网</span></li>
+									<li><label>客户简称:</label><span>光华电网</span></li>	
+									<li><label>客户阶段:</label><span>调试</span></li>
+									<li><label>　　地址:</label><span>安徽省雨花区雨花村委</span></li>
+									<li><label>所在城市:</label><span>合肥</span></li>
+									<li><label>　业务员:</label><span>曹操</span></li>
+									<li><label>咨询时间:</label><span>2017/03/03</span></li>
+									<li><label>最近跟踪时间:</label><span>2017/03/03</span></li>
+									<li><label>客户来源:</label><span>客户介绍</span></li>
+									<li class="client-center-lastLi"><label>　　备注:</label><textarea name="" rows="5" cols="50">貂蝉到底是曹操的，吕布的，还是董卓的，最后为什么又是关羽的？</textarea></li>
+								</ul> 
+								
+								<div class="client-centrality-div"><p>联系人信息</p><a class="index-create" href="#">新增联系人</a></div>
+							   <table>
+							   	  <thead>
+								   	<tr>
+								   		<th>姓名</th>
+										<th>电话</th>
+										<th>性别</th>
+										<th>职务</th>
+									</tr>
+								  	</thead>
+								  	<tbody>
+								  	<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+									</tr>
+									</tbody>
+							   </table>
+						    </div>`
+				  ,btn: ['返回']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					}
+				});
+			});
+			//修改弹窗
+			$(document).on("click",".client-center-btn3",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['840px', '600px']
+				  ,title: '编辑信息'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="matter-basic-list-createWindow client-centrality-createWindow">
+				  				<p>客户信息</p>
+								<ul>
+									<li><label>客户名称:</label><input type="text" /></li>
+									<li><label>客户简称:</label><input type="text" /></li>	
+									<li><label>客户阶段:</label>
+										<select name="">
+											<option value="">目标客户</option>
+											<option value="">意向客户</option>
+										</select>
+									</li>
+									<li><label>　　地址:</label><input type="text" /></li>
+									<li><label>所在城市:</label><input type="text" /></li>
+									<li><label>客户来源:</label>
+										<select name="">
+											<option value="">网络咨询</option>
+											<option value="">伙伴推荐</option>
+											<option value="">来电咨询</option>
+											<option value="">客户推荐</option>
+											<option value="">行业搜索</option>
+											<option value="">其他</option>
+										</select>
+									</li>
+									<li><label>咨询时间:</label><input type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" placeholder="请输入开始时间"></li>
+									<li class="client-center-lastLi"><label>　　备注:</label><textarea name="" rows="5" cols="50"></textarea></li>
+								</ul> 
+								
+								<div class="client-centrality-div"><p>联系人信息</p><a class="index-create" href="#">新增联系人</a></div>
+							   <table>
+							   	  <thead>
+								   	<tr>
+								   		<th>姓名</th>
+										<th>电话</th>
+										<th>性别</th>
+										<th>职务</th>
+										<th>操作</th>
+									</tr>
+								  	</thead>
+								  	<tbody>
+								  	<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+								   		<td><a>修改</a><a>删除</a></td>
+									</tr>
+									</tbody>
+							   </table>
+						    </div>`
+				  ,btn: ['确定','返回']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			
+			//删除
+			$(document).on("click",".client-center-btn4",function(){
+				$(this).parent().parent().remove();
+			});
+			
+			//左边栏高度适配
+			$(".index-main-left").css("height",$(document).height()-54-15-2+42*4); //15：上边距   54：头部高度   2：上下边框1px
+		</script>
+	</body>
+
+</html>

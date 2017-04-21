@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>order-specifics</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>订单管理</span> <em>>></em> <span>订单明细</span>
+					</div>
+					<div class="order-specifics-create">
+						<a class="index-create order-specifics-create" href="#">新建退单</a>
+					</div>
+					<div class="user-acceptance">
+							<div class="user-acceptance-table order-specifics-td">
+								<table>
+									<thead>
+										<tr>
+											<th></th>
+											<th>订单编号</th>
+											<th>工程类型</th>
+											<th>项目名</th>
+											<th>电话</th>
+											<th>退单日期</th>
+											<th>是否需退款</th>
+											<th>退款金额</th>
+											<th>退款原因</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!--此处填写数据-->
+									</tbody>
+								</table>
+
+							</div>
+							<!--分页-->
+							<div id="acceptance-page"></div>
+						
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laydate/laydate.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>" +
+							"<td> <i class='checkBox'></i></td>" +
+							"<td>" + res[i].id + "</td>" +
+							"<td>" + res[i].link + "</td>" +
+							"<td>" + res[i].date + "</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td><i class='index-see'></i></td>" +
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+			
+			
+			//查看
+			$(document).on("click",".order-specifics-td tbody tr",function(e){
+				e.stopPropagation();
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['630px', '400px']
+				  ,title: '退单详情'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail">
+								<div class="order-list-detail-left">
+									<label>　订单编号:　</label>
+									<select name="" style="width: 100px; border: 1px solid #E2E2E2; color: #555;">
+										<option value="">请选择</option>
+										<option value="">内容二</option>
+										<option value="">内容一</option>
+									</select>
+									<br>	
+									<label>　　　合同名:　</label><span>安徽雨花村委</span><br>	
+									<label>　　　跟单人:　</label><span>客服-貂蝉</span><br>	
+									<label>退单申请日期:　</label><span>2017/02/02</span><br>
+									<label>是佛偶要退款:　</label><span>是</span><br>
+									<label>　　退单原因:　</label><span>物料有问题</span><br>
+									<label>　　退单说明:　</label><span>物料有问题</span><br>
+								</div>
+							    <div class="order-list-detail-right">
+									<label>　工程类型:　</label><input style="border: 1px solid #E2E2E2; width: 100px; height: 18px;" type="text" placeholder="ZJ20170303"/><br>	
+									<label>　　项目名:　</label><span>Gtowatt</span><br>	
+									<label>负责人电话:　</label><span>15888888888</span><br>	
+									<label>　耗时(天):　</label><span>68</span><br>
+									<label>　退款金额:　</label><span>12345</span><br>
+									<label>　　　电话:　</label><span>5201314</span><br>
+									<label>　　　　</label>
+								</div>
+						    </div>`
+				  ,btn: ['确定', '取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});   
+			});
+			//新建退单
+			$(".order-specifics-create").click(function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['740px', '420px']
+				  ,title: '新建退单'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail  order-specifics-createWindow">
+								<div class="order-list-detail-left">
+									<label>　　订单编号:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容二</option>
+										<option value="">内容一</option>
+									</select>
+									<br>	
+									<label>　　　合同名:　</label><input type="text" /><br>	
+									<label>　　　跟单人:　</label><input type="text" /><br>	
+									<label>退单申请日期:　</label><input type="text" /><br>
+									<label>　是否要退款:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容二</option>
+										<option value="">内容一</option>
+									</select>
+									<br>
+									<label>　　退单原因:　</label><input type="text" /><br>
+									<label>　　退单说明:　</label><input type="text" /><br>
+								</div>
+							    <div class="order-list-detail-right">
+									<label>　工程类型:　</label><input type="text" /><br>	
+									<label>　　项目名:　</label><input type="text" /><br>	
+									<label>负责人电话:　</label><input type="text" /><br>	
+									<label>　耗时(天):　</label><input type="text" /><br>
+									<label>　退款金额:　</label><input type="text" /><br>
+									<label>　　　电话:　</label><input type="text" /><br>
+									<label>　　　　</label>
+								</div>
+						    </div>`
+				  ,btn: ['确定', '取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});  
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--work-notify</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>工程管理</span> <em>>></em> <span>工程通知</span>
+					</div>
+					<div class="order-specifics-create">
+						<a class="index-create work-notify-create" href="#">新建通知</a>
+					</div>
+					<div class="user-acceptance">
+						
+						<div class="user-acceptance-table">
+							<table>
+								<thead>
+									<tr>
+										<th></th>
+										<th>工程编号</th>
+										<th>工程类型</th>
+										<th>项目名</th>
+										<th>联系方式</th>
+										<th>标题</th>
+										<th>紧急程度</th>
+										<th>创建人</th>
+										<th>创建时间</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!--此处填写数据-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--分页-->
+					<div id="acceptance-page"></div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>"+
+								"<td> <i class='checkBox'></i></td>"+
+								"<td>"+res[i].id+"</td>"+
+								"<td>"+res[i].link+"</td>"+
+								"<td>"+res[i].date+"</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>"+
+									"<a class='work-notify-exact' href='#'>查看</a>"+
+								"</td>"+
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+			
+			
+			//新增弹窗
+			$(".work-notify-create").click(function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['740px', '400px']
+				  ,title: '新建通知'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail work-notify-createWindow" style="height:0;">
+								<div class="order-list-detail-left index-left">
+									<label>工程编号:　</label>
+									<select name="">
+										<option value="">浙江电站</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>	
+									<label>　联系人:　</label><input type="text" value="张系翔" /><br>	
+									<label>　创建人:　</label><input type="text" value="张系翔" /><br>
+									<label>　　标题:　</label><input type="text" value="" /><br>
+								</div>
+							    <div class="order-list-detail-right index-right">
+									<label>　　　客户名:　</label><input type="text" value="安徽省花山区雨花街道" /><br>	
+									<label>　　紧急程度:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select>
+									<br>
+									<label>　任务接收人:　</label>
+									<select name="">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select>
+									<br>
+									<label>任务处理时间:　</label><input type="text" value="" /><br>
+								</div>
+								<div class="work-notify-say" style="margin-top:10px">
+									<label>　　内容:</label>
+									<textarea name="" rows="5" cols="50">请输入内容</textarea>
+								</div>
+						    </div>`
+				  ,btn: ['保存', '取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});   
+			});
+			
+			
+			//查看
+			$(document).on("click",".work-notify-exact",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['720px', '340px']
+				  ,title: '任务详情'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail work-notify-createWindow" style="height:0;">
+								<div class="order-list-detail-left">
+									<label>　工程编号:　</label>
+									<select name="" style="width:164px;margin-left:-6px;">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>　　联系人:　</label><span>张系翔</span><br>	
+									<label>　　创建人:　</label><span>张系翔</span><br>
+									<label>　　　标题:　</label><span>爱死你了</span><br>
+									<label>　　　内容:　</label><span>真的爱死你了</span><br>
+								</div>
+							    <div class="order-list-detail-right">
+									<label>　　　客户名:　</label><span>雨花街道电站</span><br>	
+									<label>　　紧急程度:　</label><span class="color-red">加急</span><br>	
+									<label>　任务接收人:　</label>
+									<select name="" style="width:164px;margin-left:-6px;">
+										<option value="">请选择</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>任务处理时间:　</label><span>2017/02/02</span><br>
+									<label>　　</label><span></span><br>
+								</div>
+						    </div>`
+				  ,btn: ['确定', '取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			
+			
+			
+			
+			
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--client-centrality</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>用户中心</span> <em>>></em> <span>客户中心</span>
+					</div>
+					<div class="client-center-warp" style="margin-top: 10px;">
+						<div class="client-center-left">
+							<h3><i></i><span>2017客户概况</span></h3>
+							<div class="client-center-left-pic">
+								<div id="container-left" style="min-width:400px;height:400px"></div>
+							</div>
+						</div>
+						<div class="client-center-right">
+							<h3><i></i><span>近年客户分布</span></h3>
+							<div class="client-center-right-pic">
+								<div id="container-right" style="min-width:400px;height:400px"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="client-center-table">
+						<h3>
+							<div>
+								<i></i><span>客户列表</span>
+							</div>
+							<div class="client-center-table-a">
+								<a class="client-center-create" href="javascript:void(0);">新增</a>
+								<a href="javascript:void(0);">导入</a>
+							</div>
+						</h3>
+						<div class="user-acceptance-seach" style="margin-top: 0px; margin-left: 20px;">
+							<span>刷选</span>
+							<select name="">
+								<option value="">我的客户</option>
+								<option value="">目标客户</option>
+								<option value="">意向客户</option>
+								<option value="">成交客户</option>
+								<option value="">交易客户</option>
+							</select>
+							<div class="user-acceptance-seachBtn">
+								<input type="search" placeholder="请输入查询内容">
+							</div>
+							<div class="client-center-table-i">
+								<i><em>10</em></i><i></i> <i></i>
+							</div>
+
+						</div>
+						<div class="user-acceptance">
+							<div class="user-acceptance-table">
+								<table>
+									<thead>
+										<tr>
+											<th></th>
+											<th>项目</th>
+											<th>工程类型</th>
+											<th>联系人</th>
+											<th>电话</th>
+											<th>邮箱</th>
+											<th>客户状态</th>
+											<th>跟单人</th>
+											<th>初勘时间</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!--此处填写数据-->
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!--分页-->
+						<div id="acceptance-page"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laydate/laydate.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://img.hcharts.cn/highcharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://img.hcharts.cn/highcharts/modules/exporting.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://img.hcharts.cn/highcharts/modules/data.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript">
+			$(function () {
+    $('#container-left').highcharts({
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+        },
+        yAxis: {
+            title: {
+                text: '气温 (°C)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true          // 开启数据标签
+                },
+                enableMouseTracking: false // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+            }
+        },
+        series: [{
+            name: '东京',
+            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+        }, {
+            name: '伦敦',
+            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        }]
+    });
+});
+
+			//右侧饼状图
+			$('#container-right').highcharts({
+				chart: {
+					plotBackgroundColor: null,
+					plotBorderWidth: null,
+					plotShadow: false
+				},
+				title: {
+					text: ''
+				},
+				tooltip: {
+					headerFormat: '{series.name}<br>',
+					pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+				},
+				plotOptions: {
+					pie: {
+						allowPointSelect: true,
+						cursor: 'pointer',
+						dataLabels: {
+							enabled: true,
+							format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+							style: {
+								color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+							}
+						}
+					}
+				},
+				series: [{
+					type: 'pie',
+					name: '浏览器访问量占比',
+					data: [
+						['Firefox', 45.0],
+						['IE', 26.8],
+						{
+							name: 'Chrome',
+							y: 12.8,
+							sliced: true,
+							selected: true
+						},
+						['Safari', 8.5],
+						['Opera', 6.2],
+						['其他', 0.7]
+					]
+				}]
+			});
+
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>" +
+							"<td> <i class='checkBox'></i></td>" +
+							"<td>" + res[i].id + "</td>" +
+							"<td>" + res[i].link + "</td>" +
+							"<td>" + res[i].date + "</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td><span class='index-green'>初勘</span></td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>" +
+							"<a class='client-center-btn1' href='work-survey.html'></a>" +
+							"<a class='client-center-btn2' href='javascript:void(0);'></a>" +
+							"<a class='client-center-btn3' href='javascript:void(0);'></a>" +
+							"<a class='client-center-btn4' href='javascript:void(0);'></a>" +
+							"</td>" +
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+
+			//新增
+
+			$(".client-center-create").click(function() {
+				layer.open({
+					type: 1 //Page层类型
+						,
+					area: ['840px', '600px'],
+					title: '编辑信息',
+					shade: 0.6 //遮罩透明度
+						,
+					maxmin: true //允许全屏最小化
+						,
+					anim: 5 //0-6的动画形式，-1不开启
+						,
+					content: `<div class="matter-basic-list-createWindow client-centrality-createWindow">
+				  				<p>客户信息</p>
+								<ul>
+									<li><label>客户名称:</label><input type="text" /></li>
+									<li><label>客户简称:</label><input type="text" /></li>	
+									<li><label>客户阶段:</label>
+										<select name="">
+											<option value="">目标客户</option>
+											<option value="">意向客户</option>
+										</select>
+									</li>
+									<li><label>　　地址:</label><input type="text" /></li>
+									<li><label>所在城市:</label><input type="text" /></li>
+									<li><label>客户来源:</label>
+										<select name="">
+											<option value="">网络咨询</option>
+											<option value="">伙伴推荐</option>
+											<option value="">来电咨询</option>
+											<option value="">客户推荐</option>
+											<option value="">行业搜索</option>
+											<option value="">其他</option>
+										</select>
+									</li>
+									<li><label>咨询时间:</label><input type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" placeholder="请输入开始时间"></li>
+									<li class="client-center-lastLi"><label>　　备注:</label><textarea name="" rows="5" cols="50"></textarea></li>
+								</ul> 
+								
+								<div class="client-centrality-div"><p>联系人信息</p><a class="index-create" href="#">新增联系人</a></div>
+							   <table>
+							   	  <thead>
+								   	<tr>
+								   		<th>姓名</th>
+										<th>电话</th>
+										<th>性别</th>
+										<th>职务</th>
+										<th>操作</th>
+									</tr>
+								  	</thead>
+								  	<tbody>
+								  	<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+								   		<td><a>修改</a><a>删除</a></td>
+									</tr>
+									</tbody>
+							   </table>
+						    </div>`,
+					btn: ['确定', '返回'],
+					yes: function(index, layero) {
+
+						layer.closeAll();
+					},
+					btn1: function(index, layero) {
+
+					}
+				});
+			});
+
+			//详情点击弹窗
+			$(document).on("click", ".client-center-btn2", function() {
+				layer.open({
+					type: 1 //Page层类型
+						,
+					area: ['840px', '600px'],
+					title: '客户信息详情',
+					shade: 0.6 //遮罩透明度
+						,
+					maxmin: true //允许全屏最小化
+						,
+					anim: 5 //0-6的动画形式，-1不开启
+						,
+					content: `<div class="matter-basic-list-createWindow client-centrality-createWindow">
+				  				<p>客户信息</p>
+								<ul>
+									<li><label>客户名称:</label><span>光华电网</span></li>
+									<li><label>客户简称:</label><span>光华电网</span></li>	
+									<li><label>客户阶段:</label><span>调试</span></li>
+									<li><label>　　地址:</label><span>安徽省雨花区雨花村委</span></li>
+									<li><label>所在城市:</label><span>合肥</span></li>
+									<li><label>　业务员:</label><span>曹操</span></li>
+									<li><label>咨询时间:</label><span>2017/03/03</span></li>
+									<li><label>最近跟踪时间:</label><span>2017/03/03</span></li>
+									<li><label>客户来源:</label><span>客户介绍</span></li>
+									<li class="client-center-lastLi"><label>　　备注:</label><textarea name="" rows="5" cols="50">貂蝉到底是曹操的，吕布的，还是董卓的，最后为什么又是关羽的？</textarea></li>
+								</ul> 
+								
+								<div class="client-centrality-div"><p>联系人信息</p><a class="index-create" href="#">新增联系人</a></div>
+							   <table>
+							   	  <thead>
+								   	<tr>
+								   		<th>姓名</th>
+										<th>电话</th>
+										<th>性别</th>
+										<th>职务</th>
+									</tr>
+								  	</thead>
+								  	<tbody>
+								  	<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+									</tr>
+									</tbody>
+							   </table>
+						    </div>`,
+					btn: ['返回'],
+					yes: function(index, layero) {
+
+						layer.closeAll();
+					}
+				});
+			});
+
+			//修改弹窗
+			$(document).on("click", ".client-center-btn3", function() {
+				layer.open({
+					type: 1 //Page层类型
+						,
+					area: ['840px', '600px'],
+					title: '编辑信息',
+					shade: 0.6 //遮罩透明度
+						,
+					maxmin: true //允许全屏最小化
+						,
+					anim: 5 //0-6的动画形式，-1不开启
+						,
+					content: `<div class="matter-basic-list-createWindow client-centrality-createWindow">
+				  				<p>客户信息</p>
+								<ul>
+									<li><label>客户名称:</label><input type="text" /></li>
+									<li><label>客户简称:</label><input type="text" /></li>	
+									<li><label>客户阶段:</label>
+										<select name="">
+											<option value="">目标客户</option>
+											<option value="">意向客户</option>
+										</select>
+									</li>
+									<li><label>　　地址:</label><input type="text" /></li>
+									<li><label>所在城市:</label><input type="text" /></li>
+									<li><label>客户来源:</label>
+										<select name="">
+											<option value="">网络咨询</option>
+											<option value="">伙伴推荐</option>
+											<option value="">来电咨询</option>
+											<option value="">客户推荐</option>
+											<option value="">行业搜索</option>
+											<option value="">其他</option>
+										</select>
+									</li>
+									<li><label>咨询时间:</label><input type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" placeholder="请输入开始时间"></li>
+									<li class="client-center-lastLi"><label>　　备注:</label><textarea name="" rows="5" cols="50"></textarea></li>
+								</ul> 
+								
+								<div class="client-centrality-div"><p>联系人信息</p><a class="index-create" href="#">新增联系人</a></div>
+							   <table>
+							   	  <thead>
+								   	<tr>
+								   		<th>姓名</th>
+										<th>电话</th>
+										<th>性别</th>
+										<th>职务</th>
+										<th>操作</th>
+									</tr>
+								  	</thead>
+								  	<tbody>
+								  	<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+								   		<td><a>修改</a><a>删除</a></td>
+									</tr>
+									</tbody>
+							   </table>
+						    </div>`,
+					btn: ['确定', '返回'],
+					yes: function(index, layero) {
+
+						layer.closeAll();
+					},
+					btn1: function(index, layero) {
+
+					}
+				});
+			});
+
+			//删除
+			$(document).on("click", ".client-center-btn4", function() {
+				$(this).parent().parent().remove();
+			});
+
+			//左边栏高度适配
+			$(".index-main-left").css("height", $(document).height() - 54 - 15 - 2 + 42 * 4); //15：上边距   54：头部高度   2：上下边框1px
+		</script>
+	</body>
+
+</html>

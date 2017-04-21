@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--matter-basic</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>物料管理</span> <em>>></em> <span>基准物料</span>
+					</div>
+					<div class="matter-basic-list">
+						<ul>
+							<li><a href="matter-basic-list.html">物料规格列表</a></li>
+							<li class="user-remind-active"><a href="matter-basic-danger.html">报警设置</a></li>
+						</ul>
+					</div>
+					<div class="user-acceptance matter-basic-list-content">
+						
+							<!--<div class="matter-basic-list-seach">
+								<p>选择设备</p>
+								<ul>
+									<li>
+										<i></i>
+										<span>
+											变压器
+											<a href="#">发电机</a>
+											<a href="#">发电机</a>
+										</span>
+										
+									</li>
+									<li>
+										<i></i>
+										<span>
+											变压器
+											<a href="#">发电机</a>
+											<a href="#">发电机</a>
+										</span>
+									</li>
+									<li>
+										<i></i>
+										<span>
+											变压器
+											<a href="#">发电机</a>
+											<a href="#">发电机</a>
+										</span>
+									</li>
+								</ul>
+							</div>
+							<div class="user-acceptance-seachBtn">
+								<input type="search" placeholder="请输入查询内容">
+							</div>-->
+						
+						<div class="order-specifics-create">
+							<a class="index-create matter-basic-danger-create" style="top: 10px;" href="#">新建报警</a>
+						</div>
+						<div class="user-acceptance-table matter-basic-list-table" style="margin-top: 50px;">
+							<table>
+								<thead>
+									<tr>
+										<th></th>
+										<th>代码</th>
+										<th>名称</th>
+										<th>规格型号</th>
+										<th>计量单位</th>
+										<th>当前库存</th>
+										<th>安全库存</th>
+										<th>报警库存</th>
+										<th>安全差量</th>
+										<th>报警间隔时间(h)</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!--此处填写数据-->
+								</tbody>
+							</table>
+						</div>
+						<!--分页-->
+					<div id="acceptance-page"></div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>"+
+								"<td> <i class='checkBox'></i></td>"+
+								"<td>"+res[i].id+"</td>"+
+								"<td>"+res[i].link+"</td>"+
+								"<td>"+res[i].date+"</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td><a class='matter-basic-danger-edit' href='#'>编辑</a></td>"+
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+			
+			
+			//查看
+			$(document).on("click",".matter-basic-danger-create",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['660px', '300px']
+				  ,title: '新增报警'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail matter-basic-danger-createWindow" style="height:0;">
+								<div class="order-list-detail-left">
+									<label>报警类型:　</label>
+									<select name="">
+										<option value="">基础物料</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>　　名称:　</label><input type="text" /><br>	
+									<label>安全库存:　</label><input type="text" /><br>
+									<label>报警间隔:　</label><input type="text" /><br>
+								</div>
+							    <div class="order-list-detail-right">
+									<label>　父项名称:　</label>
+									<select name="">
+										<option value="">请选择报警的物料</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>　规格型号:　</label><input type="text" /><br>	
+									<label>　报警库存:　</label><input type="text" /><br>
+									<label>　　</label><br>
+								</div>
+						    </div>`
+				  ,btn: ['保存','取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			
+			
+			
+			//编辑 弹框
+		
+			$(document).on("click",".matter-basic-danger-edit",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['660px', '300px']
+				  ,title: '编辑新增报警'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail matter-basic-danger-createWindow" style="height:0;">
+								<div class="order-list-detail-left">
+									<label>报警类型:　</label>
+									<select name="">
+										<option value="">基础物料</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>　　名称:　</label><input type="text" /><br>	
+									<label>安全库存:　</label><input type="text" /><br>
+									<label>报警间隔:　</label><input type="text" /><br>
+								</div>
+							    <div class="order-list-detail-right">
+									<label>　父项名称:　</label>
+									<select name="">
+										<option value="">请选择报警的物料</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>　规格型号:　</label><input type="text" /><br>	
+									<label>　报警库存:　</label><input type="text" /><br>
+									<label>　　</label><br>
+								</div>
+						    </div>`
+				  ,btn: ['保存','取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			
+			
+			
+		</script>
+	</body>
+
+</html>

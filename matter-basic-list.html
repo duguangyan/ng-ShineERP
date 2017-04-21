@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--matter-basic</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>物料管理</span> <em>>></em> <span>基准物料</span>
+					</div>
+					<div class="matter-basic-list">
+						<ul>
+							<li class="user-remind-active"><a href="matter-basic-list.html">物料规格列表</a></li>
+							<li><a href="matter-basic-danger.html">报警设置</a></li>
+						</ul>
+					</div>
+					<div class="user-acceptance matter-basic-list-content">
+						
+							<div class="matter-basic-list-seach">
+								<p>选择设备</p>
+								<ul>
+									<li>
+										<i></i>
+										<span>
+											变压器
+											<a href="#">发电机</a>
+											<a href="#">发电机</a>
+										</span>
+										
+									</li>
+									<li>
+										<i></i>
+										<span>
+											变压器
+											<a href="#">发电机</a>
+											<a href="#">发电机</a>
+										</span>
+									</li>
+									<li>
+										<i></i>
+										<span>
+											变压器
+											<a href="#">发电机</a>
+											<a href="#">发电机</a>
+										</span>
+									</li>
+								</ul>
+							</div>
+							<div class="user-acceptance-seachBtn">
+								<input type="search" placeholder="请输入查询内容">
+							</div>
+						
+						<div class="order-specifics-create">
+							<a class="index-create matter-basic-list-create" style="top: 10px;" href="#">新建勘测</a>
+						</div>
+						<div class="user-acceptance-table matter-basic-list-table">
+							<table>
+								<thead>
+									<tr>
+										<th></th>
+										<th>子项代码</th>
+										<th>子项名称</th>
+										<th>子项规格型号</th>
+										<th>物料属性</th>
+										<th>级联个单位</th>
+										<th>定额数量</th>
+										<th>制单人</th>
+										<th>备注</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!--此处填写数据-->
+								</tbody>
+							</table>
+						</div>
+						<!--分页-->
+					<div id="acceptance-page"></div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>"+
+								"<td> <i class='checkBox'></i></td>"+
+								"<td>"+res[i].id+"</td>"+
+								"<td>"+res[i].link+"</td>"+
+								"<td>"+res[i].date+"</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>备注</td>"+
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+			
+			
+			//查看
+			$(document).on("click",".matter-basic-list-create",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['840px', '500px']
+				  ,title: '新加规格'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="matter-basic-list-createWindow">
+								<ul>
+									<li><label>父项编码:</label><span>ZJ1234567</span><i class="matter-basic-list-cw"></i>	</li>
+									<li><label>父项名称:</label><span>ZJ1234567</span>	</li>
+									<li><label>全名:</label><span>ZJ1234567</span>	</li>
+									<li><label>规格型号:</label><span>光伏</span>	</li>
+									<li><label>物料属性:</label><span>2017/03/03</span>	</li>
+									<li><label>计量单位:</label><span>2017/03/03</span>	</li>
+									<li><label>供应商:</label><span>刘备</span>	</li>
+									<li><label>品牌:</label><span>china</span>	</li>
+									<li><label>工序:</label><span>大工序</span>	</li>
+									<li><label>定额数量:</label><span>100000</span>	</li>
+								</ul> 
+							   <table>
+								   	<tr>
+								   		<th>子项代码</th>
+										<th>子项名称</th>
+										<th>子项规格型号</th>
+										<th>物料属性</th>
+										<th>计量单位</th>
+										<th>供应商</th>
+										<th>品牌</th>
+										<th>备注</th>
+									</tr>
+								   	<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+								   		<td>Data</td>
+								   		<td>YAGEO/大毅/风华</td>
+								   		<td>SMT</td>
+								   		<td><input type="text" placeholder="请输入备注"/></td>
+									</tr>
+									<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+								   		<td>Data</td>
+								   		<td>YAGEO/大毅/风华</td>
+								   		<td>SMT</td>
+								   		<td><input type="text" placeholder="请输入备注"/></td>
+									</tr>
+									<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+								   		<td>Data</td>
+								   		<td>YAGEO/大毅/风华</td>
+								   		<td>SMT</td>
+								   		<td><input type="text" placeholder="请输入备注"/></td>
+									</tr>
+									<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>
+								   		<td>Data</td>
+								   		<td>Data</td>
+								   		<td>YAGEO/大毅/风华</td>
+								   		<td>SMT</td>
+								   		<td><input type="text" placeholder="请输入备注"/></td>
+									</tr>
+							   </table>
+						    </div>`
+				  ,btn: ['关闭']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					}
+				});
+			});
+			
+			//二级弹窗
+			$(document).on("click",".matter-basic-list-cw",function(){
+			var d=	layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['580px', '300px']
+				  ,title: '父项编码'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="matter-basic-list-cwWindow">
+								<div class="matter-basic-list-seach">
+									<p>选择设备</p>
+									<ul>
+										<li>
+											<i></i>
+											<span>
+												变压器
+												<a href="#">发电机</a>
+												<a href="#">发电机</a>
+											</span>
+										</li>
+										<li>
+											<i></i>
+											<span>
+												变压器
+												<a href="#">发电机</a>
+												<a href="#">发电机</a>
+											</span>
+										</li>
+										<li>
+											<i></i>
+											<span>
+												变压器
+												<a href="#">发电机</a>
+												<a href="#">发电机</a>
+											</span>
+										</li>
+									</ul>
+								</div>
+								 <table>
+								   	<tr>
+								   		<th>代码</th>
+										<th>名称</th>
+										<th>规格型号</th>
+										<th>供应商</th>
+										<th>工序</th>
+									</tr>
+								   	<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>							
+								   		<td>SMT</td>
+								   		<td>SMT</td>
+									</tr>
+									<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>							
+								   		<td>SMT</td>
+								   		<td>SMT</td>
+									</tr>
+									<tr>
+								   		<td>001.001001</td>
+								   		<td>贴片电阻SMD</td>
+								   		<td>3.3K/0603/F/SMD</td>							
+								   		<td>SMT</td>
+								   		<td>SMT</td>
+									</tr>
+									
+							   </table>
+						    </div>`
+				  ,btn: ['关闭']
+					,yes: function(index, layero){
+						layer.close(index);
+					}
+				});
+			});
+			
+			
+			//tr 弹框
+			$(document).on("click",".matter-basic-list-table tbody tr",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['640px', '300px']
+				  ,title: '物料清单'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="matter-basic-list-createWindow matter-basic-list-createTable">
+								<ul>
+									<li><label>父项编码:</label><span>ZJ1234567</span></li>
+									<li><label>父项名称:</label><span>ZJ1234567</span>	</li>
+									<li><label>全名:</label><span>ZJ1234567</span>	</li>
+									<li><label>规格型号:</label><span>光伏</span>	</li>
+									<li><label>物料属性:</label><span>2017/03/03</span>	</li>
+									<li><label>计量单位:</label><span>2017/03/03</span>	</li>
+									<li><label>供应商:</label><span>刘备</span>	</li>
+									<li><label>品牌:</label><span>china</span>	</li>
+									<li><label>工序:</label><span>大工序</span>	</li>
+									<li><label>定额数量:</label><span>100000</span>	</li>
+								</ul> 
+						    </div>`
+				  ,btn: ['关闭']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					}
+				});
+			});
+			
+			
+			
+		</script>
+	</body>
+
+</html>

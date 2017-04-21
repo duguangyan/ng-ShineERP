@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--auditing</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>订单管理</span> <em>>></em> <span>订单审核</span>
+					</div>
+					<div class="user-acceptance">
+						<div class="user-acceptance-seach">
+							<span>订单状态：</span>
+							<select name="" style="margin-left: 0;" >
+								<option value="">待审核</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+							</select>
+						</div>
+							<div class="user-acceptance-table order-auditing-td">
+								<table>
+									<thead>
+										<tr>
+											<th></th>
+											<th>订单编号</th>
+											<th>工程编号</th>
+											<th>工程类型</th>
+											<th>项目名</th>
+											<th>提交时间</th>
+											<th>付款方式</th>
+											<th>订单状态</th>
+											<th>提交人</th>
+											<th>审核状态</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!--此处填写数据-->
+									</tbody>
+								</table>
+
+							</div>
+							<!--分页-->
+							<div id="acceptance-page"></div>
+						
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laydate/laydate.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>" +
+							"<td> <i class='checkBox'></i></td>" +
+							"<td>" + res[i].id + "</td>" +
+							"<td>" + res[i].link + "</td>" +
+							"<td>" + res[i].date + "</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td>111</td>" +
+							"<td><a class='order-auditing-good' href='javascript:void(0);'>已审</a><a class='order-auditing-check' href='javascript:void(0);'>查看</a></td>" +
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+			
+			//order-list.html
+			$(document).on("click",".order-auditing-td tbody tr",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['760px', '460px']
+				  ,title: '订单详情'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-auditing-detail">
+								<div class="order-auditing-detail-content">
+									<ul>
+										<li><label>　项目名:　</label><span>安徽雨花村委</span></li>
+										<li><label>　工程类型:　</label><span>ZJ20170303</span></li>
+										<li><label>　订单编号:　</label><span>ZJ20170303</span></li>
+										<li><label>　工程编号:　</label><span>ZJ20170303</span></li>
+										<li><label>　联系人:　</label><span>貂蝉</span></li>
+										<li><label>　联系电话:　</label><span>15888888888</span></li>
+										<li><label>　跟单人:　</label><span>客服-西施</span></li>
+										<li><label>　订单状态:　</label><span>待审核</span></li>
+										<li><label>　审核状态:　</label><span>通过</span></li>
+										<li><label>　付款类型:　</label><span>全款</span></li>
+										<li><label>　订单金额:　</label><span>12345</span></li>
+										<li><label>　预定金额:　</label><span>54321</span></li>
+										<li><label>　初勘日期:　</label><span>2017/03/03</span></li>
+										<li><label>　耗时(天):　</label><span>22</span></li>
+										<li><label>　施工方:　</label><span>Growatt</span></li>
+										<li><label>　实际金额:　</label><span>100000</span></li>
+										<li class="order-auditing-detail-contentLi"><label>　订单金额组成部分:　</label><em></em></li>
+										<li class="order-auditing-detail-contentLi"><label>　附加信息:　</label>
+											<em style="width: 85%;">
+												<ol>
+													<li><span>合同：abcdef.xlsx</span> <a href="javascript:void(0);">预览</a><a href="javascript:void(0);">下载</a></li>
+													<li><span>合同：abcdef.xlsx</span> <a href="javascript:void(0);">预览</a><a href="javascript:void(0);">下载</a></li>
+													<li><span>并网申请书：abcdef.xlsx</span> <a href="javascript:void(0);">预览</a><a href="javascript:void(0);">下载</a></li>
+													<li><span>并网申请书：abcdef.xlsx</span> <a href="javascript:void(0);">预览</a><a href="javascript:void(0);">下载</a></li>
+												</ol>
+											</em>
+										</li>
+										<li class="order-auditing-detail-contentLi"><span>　审核建议:　</span><span>审核建议审核建议小桥流水人家.....</span></li>
+									</ul>
+								</div>
+						    </div>`
+				  ,btn: ['关闭']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					}
+				});   
+			});
+			
+			//查看
+			$(document).on("click",".order-auditing-check",function(e){
+				e.stopPropagation();
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['760px', '660px']
+				  ,title: '查看订单'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-auditing-detail">
+								<div class="order-auditing-detail-content">
+									<ul>
+										<li><label>　项目名:　</label><span>安徽雨花村委</span></li>
+										<li><label>　工程类型:　</label><span>ZJ20170303</span></li>
+										<li><label>　订单编号:　</label><span>ZJ20170303</span></li>
+										<li><label>　工程编号:　</label><span>ZJ20170303</span></li>
+										<li><label>　联系人:　</label><span>貂蝉</span></li>
+										<li><label>　联系电话:　</label><span>15888888888</span></li>
+										<li><label>　跟单人:　</label><span>客服-西施</span></li>
+										<li><label>　订单状态:　</label><span>待审核</span></li>
+										<li><label>　审核状态:　</label><span>通过</span></li>
+										<li><label>　付款类型:　</label><span>全款</span></li>
+										<li><label>　订单金额:　</label><span>12345</span></li>
+										<li><label>　预定金额:　</label><span>54321</span></li>
+										<li><label>　初勘日期:　</label><span>2017/03/03</span></li>
+										<li><label>　耗时(天):　</label><span>22</span></li>
+										<li><label>　施工方:　</label><span>Growatt</span></li>
+										<li><label>　实际金额:　</label><span>100000</span></li>
+										<li class="order-auditing-detail-contentLi"><label>　订单金额组成部分:　</label><em></em></li>
+										<li class="order-auditing-detail-contentLi"><label>　附加信息:　</label>
+											<em style="width: 85%;">
+												<ol>
+													<li><span>合同：abcdef.xlsx</span> <a href="javascript:void(0);">预览</a><a href="javascript:void(0);">下载</a></li>
+													<li><span>合同：abcdef.xlsx</span> <a href="javascript:void(0);">预览</a><a href="javascript:void(0);">下载</a></li>
+													<li><span>并网申请书：abcdef.xlsx</span> <a href="javascript:void(0);">预览</a><a href="javascript:void(0);">下载</a></li>
+													<li><span>并网申请书：abcdef.xlsx</span> <a href="javascript:void(0);">预览</a><a href="javascript:void(0);">下载</a></li>
+												</ol>
+											</em>
+										</li>
+										<li class="order-auditing-detail-contentLi">
+											<label style="top: 0;">　订单退单项:　</label>
+											<span style="color: red;">不是退单可以忽略此项</span>
+											<em style="width: 84%; margin-left: 14.2%; margin-top: 0;" >
+												<ol style="margin-left: 5px;">
+													<li><span>退单原因：物料有问题</span> </li>
+													<li><span>申请日期：2017/03/03</span> </li>
+													<li><span>退单原因：物料有问题</span></li>
+													<li><span>申请日期：2017/03/03</span> </li>
+												</ol>
+											</em>
+										</li>
+										<br>
+										<li class="order-auditing-detail-contentLi"><label>　订单退单项:　</label><textarea rows="5" cols="30">请输入不通过驳回的原因...</textarea></li>
+									</ul>
+								</div>
+						    </div>`
+				  ,btn: ['通过', '驳回']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});   
+			});
+			//审核
+			$(document).on("click",".order-auditing-good",function(e){
+				e.stopPropagation();
+				layer.confirm('<p style="text-align: center;">订单审核已通过，是否短信邮件通知客户，并发布内部消息通知。</p>'
+				    ,{
+					  btn: ['是','否'] //按钮
+					}, function(){
+						
+					  layer.closeAll();
+					}, function(){
+					 
+					});
+			});
+		</script>
+	</body>
+
+</html>

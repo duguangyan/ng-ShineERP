@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html ng-app="my_app">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<meta name="Keywords" content="古瑞瓦特，新新能源" />
+		<meta name="Description" content="新能源提供商！" />
+		<title>ShineERP--work-survey</title>
+		<link rel="shortcut icon" href="img/vilogo.ico">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link rel="stylesheet" type="text/css" href="css/shine.css" />
+	</head>
+
+	<body ng-controller="my_controller">
+		<shine-header></shine-header>
+		<div class="index-main">
+			<shine-left></shine-left>
+			<div class="index-main-right">
+				<div class="index-main-right-warp">
+					<div class="index-main-right-nav">
+						<span>工程管理</span> <em>>></em> <span>工程勘测</span>
+					</div>
+					
+					<div class="user-acceptance">
+						<div class="order-specifics-create">
+							<a class="index-create work-survey-create" href="#">新建勘测</a>
+						</div>
+						<div class="user-acceptance-seach">
+							<select name="" style="margin-left: 0;">
+								<option value="">全部</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+								<option value="">内容一</option>
+							</select>
+						</div>
+						<div class="user-acceptance-table">
+							<table>
+								<thead>
+									<tr>
+										<th></th>
+										<th>项目名</th>
+										<th>联系人</th>
+										<th>电话</th>
+										<th>工程编号</th>
+										<th>拍板人</th>
+										<th>勘察意向书</th>
+										<th>工程状态</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!--此处填写数据-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--分页-->
+					<div id="acceptance-page"></div>
+				</div>
+			</div>
+		</div>
+
+		<script src="js/jQuery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<script src="layer/laypage/laypage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/shine.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			//以下将以jquery.ajax为例，演示一个异步分页
+			function demo(curr) {
+				//alert(Math.ceil(5/2));
+				$.get('http://ons.me/tools/dropload/json.php', {
+					page: curr || 1, //向服务端传的参数，此处只是演示
+					size: 4
+				}, function(res) {
+					console.log(res);
+					//此处仅仅是为了演示变化的内容
+					var demoContent = (new Date().getTime() / Math.random() / 1000) | 0;
+					var dd = "";
+					for(var i = 0; i < res.length; i++) {
+						dd += "<tr>"+
+								"<td> <i class='checkBox'></i></td>"+
+								"<td>"+res[i].id+"</td>"+
+								"<td>"+res[i].link+"</td>"+
+								"<td>"+res[i].date+"</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>111</td>"+
+								"<td>"+
+									"<a class='work-survey-auditing' href='#'>审核</a>"+
+									"<a class='work-survey-exact' href='#'>查看</a>"+
+									"<a class='work-survey-adit' href='#'>编辑</a>"+
+								"</td>"+
+							"</tr>";
+					}
+					$('.user-acceptance-table tbody').append(dd);
+					//显示分页
+					laypage({
+						cont: 'acceptance-page', //容器。值支持id名、原生dom对象，jquery对象。【如该容器为】：<div id="page1"></div>
+						pages: 15, //通过后台拿到的总页数
+						skin: 'yahei', //加载内置皮肤，也可以直接赋值16进制颜色值，如:#c00
+						groups: 5, //连续显示分页数
+						skip: true, //是否开启跳页
+						curr: curr || 1, //当前页
+						jump: function(obj, first) { //触发分页后的回调
+							if(!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+								demo(obj.curr);
+								$('.user-acceptance-table tbody').html(" ");
+							}
+						}
+					});
+				});
+			};
+			//运行
+			demo();
+			
+			
+			//新增弹窗
+			$(".work-survey-create").click(function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['660px', '360px']
+				  ,title: '申请初勘'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail work-manage-createWindow" style="height:0;">
+								<div class="order-list-detail-left index-left">
+									<label>项目名:　</label>
+									<select name="">
+										<option value="">浙江电站</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>	
+									<label>联系人:　</label><span>张系翔</span><br>	
+									<label>排班人:　</label>
+									<select name="">
+										<option value="">小张</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+								</div>
+							    <div class="order-list-detail-right index-right">
+									<label>地址:　</label><span>安徽省花山区雨花街道</span><br>	
+									<label>电话:　</label><span>15888888888</span><br>	
+									<label>　</label>	
+								</div>
+								<div style="margin-top:10px;">
+									<label>上传初勘意向书:</label>
+									<em class="a-upload"><input type="file"/>请选择</em>
+									<img id="newImage" alt="点击预览"  width="100px" height="50px" />
+									<!--<span class="showFileName"></span>-->
+								</div>
+						    </div>`
+				  ,btn: ['确定', '取消']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});   
+			});
+			
+			
+			//审核
+			$(document).on("click",".work-survey-auditing",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['720px', '340px']
+				  ,title: '整改审核'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail work-survey-createWindow" style="height:0;">
+								<div class="order-list-detail-left">
+									<label>　工程编号:　</label><span>ZJ20170303</span><br>	
+									<label>　　　地址:　</label><span>安徽省花山区雨花村委</span><br>	
+									<label>　　排班人:　</label>
+									<select name="" style="width:164px;margin-left:-6px;">
+										<option value="">小张</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>初勘意向书:　</label><span>abcdefg.pdf</span><a>下载</a><a>预览</a><br>
+									<label>　初勘报告:　</label><span>abcdefg.pdf</span><a>下载</a><a>预览</a><br>
+								</div>
+							    <div class="order-list-detail-right">
+									<label>　项目名称:　</label><span>雨花街道电站</span><br>	
+									<label>　　联系人:　</label><span>张三</span><br>	
+									<label>　　　电话:　</label><span>15888888888</span><br>	
+									<label>初勘建议书:　</label><span>abcdefg.pdf</span><a>下载</a><a>预览</a><br>
+									<label>　提交时间:　</label><span>2017/02/03 14:00</span><br>
+								</div>
+						    </div>`
+				  ,btn: ['确定', '驳回']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			
+			//编辑
+			$(document).on("click",".work-survey-adit",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['720px', '340px']
+				  ,title: '编辑勘测资料'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail work-survey-createWindow" style="height:0;">
+								<div class="order-list-detail-left">
+									<label>　工程编号:　</label><span>ZJ20170303</span><br>	
+									<label>　　　地址:　</label><span>安徽省花山区雨花村委</span><br>	
+									<label>　　排班人:　</label>
+									<select name="" style="width:164px;margin-left:-6px;">
+										<option value="">小张</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>初勘意向书:　</label><span>abcdefg.pdf</span><a>预览</a><br>
+									<label>　初勘报告:　</label><span>abcdefg.pdf</span><a>上传</a><a>预览</a><br>
+								</div>
+							    <div class="order-list-detail-right">
+									<label>　项目名称:　</label><span>雨花街道电站</span><br>	
+									<label>　　联系人:　</label><span>张三</span><br>	
+									<label>　　　电话:　</label><span>15888888888</span><br>	
+									<label>初勘建议书:　</label><span>abcdefg.pdf</span><a>上传</a><a>预览</a><br>
+									<label>　</label><span></span><br>
+								</div>
+								
+						    </div>`
+				  ,btn: ['确定', '驳回']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			
+			//精勘审核
+			$(document).on("click",".work-survey-exact",function(){
+				layer.open({
+				  type: 1 //Page层类型
+				  ,area: ['720px', '370px']
+				  ,title: '精勘审核'
+				  ,shade: 0.6 //遮罩透明度
+				  ,maxmin: true //允许全屏最小化
+				  ,anim: 5 //0-6的动画形式，-1不开启
+				  ,content: `<div class="order-list-detail work-survey-createWindow" style="height:0;">
+								<div class="order-list-detail-left">
+									<label>　工程编号:　</label><span>ZJ20170303</span><br>	
+									<label>　　　地址:　</label><span>安徽省花山区雨花村委</span><br>	
+									<label>　　排班人:　</label>
+									<select name="" style="width:164px;margin-left:-6px;">
+										<option value="">小张</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+										<option value="">内容一</option>
+									</select><br>
+									<label>初勘意向书:　</label><span>abcdefg.pdf</span><a>下载</a><a>预览</a><br>
+									<label>　初勘报告:　</label><span>abcdefg.pdf</span><a>下载</a><a>预览</a><br>
+									<label>　提交时间:　</label><span>2017/02/03 14:00</span><br>
+								</div>
+							    <div class="order-list-detail-right">
+									<label>　项目名称:　</label><span>雨花街道电站</span><br>	
+									<label>　　联系人:　</label><span>张三</span><br>	
+									<label>　　　电话:　</label><span>15888888888</span><br>	
+									<label>初勘建议书:　</label><span>abcdefg.pdf</span><a>下载</a><a>预览</a><br>
+									<label>　精勘报告:　</label><span>abcdefg.pdf</span><a>下载</a><a>预览</a><br>
+									<label>　</label></span><br>
+								</div>
+						    </div>`
+				  ,btn: ['确定', '驳回']
+					,yes: function(index, layero){
+					
+						layer.closeAll();
+					},btn1: function(index, layero){
+						
+
+					} 
+				});
+			});
+			
+			
+			
+			
+		</script>
+	</body>
+
+</html>
